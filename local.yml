@@ -1,0 +1,71 @@
+- hosts: localhost
+  pre_tasks:
+    # - name: Update apt cache
+    #   apt:
+    #     update_cache: true
+    #   tags:
+    #     - always
+    #     - node
+    #     - zsh
+  vars:
+    ansible_user: "{{ lookup('env', 'USER') }}"
+  vars_prompt:
+    - name: "my_password"
+      prompt: "Enter password"
+      private: yes
+  tasks:
+    - name: Install zsh
+      apt:
+        name: zsh
+      tags: zsh
+
+    - name: Check if /usr/bin/zsh exists
+      stat:
+        path: /usr/bin/zsh
+      register: zsh_stat
+      tags: zsh
+
+    - name: Check oh_my_zsh exists
+      stat:
+        path: /home/{{ ansible_user }}/.oh-my-zsh
+      register: oh_my_zsh_stat
+      tags: zsh
+
+    - name: Change shell directly in /etc/passwd
+      expect:
+        command: "chsh -s /usr/bin/zsh"
+        responses:
+          (?i)password: "{{ my_password }}"
+      when: not zsh_stat.stat.exists
+      tags: zsh
+
+    - name: Install oh-my-zsh
+      shell: curl -L https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh > ~/.oh-my-installer && chmod +x ~/.oh-my-installer && ~/.oh-my-installer
+      when: not oh_my_zsh_stat.stat.exists
+      tags: zsh
+
+    - name: Install zsh plugins
+      ansible.builtin.git:
+        repo: "https://github.com/zsh-users/zsh-autosuggestions.git"
+        dest: "~/.oh-my-zsh/plugins/zsh-autosuggestions"
+      tags: zsh
+
+    - name: update zshrc
+      blockinfile:
+        path: ~/.zshrc
+        block: |
+          plugins=(git zsh-autosuggestions)
+      tags: zsh
+
+    - name: Install node
+      apt:
+        name: [nodejs, npm]
+      tags: node
+
+    - name: Install n
+      npm:
+        name: n
+        global: true
+    - name: Install latest node
+      shell: n latest
+      tags: node
