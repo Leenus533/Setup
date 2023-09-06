@@ -78,6 +78,16 @@
         name: pnpm
         global: true
       tags: node
+    - name: Install Typescript
+      npm: 
+        name: typescript
+        global: true
+      tags: node
+    - name: Install Nodemon
+      npm:
+        name: nodemon
+        global: true
+      tags: node
     - name: Ensure .ssh directory exists.
       become_user: root
       file:
