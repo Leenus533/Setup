@@ -1,4 +1,5 @@
 dconf load /org/gnome/terminal/ < /tmp/gnome_terminal_settings_backup.txt
+dconf load /org/gnome/terminal/ < ./gnome_terminal_settings_backup.txt
 
 # Set theme to Yaru-dark (Dark Mode)
 export DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$(id -u)/bus"
