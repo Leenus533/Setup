@@ -1,12 +1,13 @@
 - hosts: localhost
+  become: yes
   pre_tasks:
-    # - name: Update apt cache
-    #   apt:
-    #     update_cache: true
-    #   tags:
-    #     - always
-    #     - node
-    #     - zsh
+    - name: Update apt cache
+      apt:
+        update_cache: true
+      tags:
+        - always
+        - node
+        - zsh
   vars:
     ansible_user: "{{ lookup('env', 'USER') }}"
     source_key: "./.ssh/id_ed25519"
@@ -125,3 +126,41 @@
         value: "Leenus533"
       tags:
       - git
+    - name: Get Google Chrome
+      apt_key:
+        url: https://dl.google.com/linux/linux_signing_key.pub
+        state: present
+      tags:
+        - google
+    - name: Add Google Chrome repository
+      apt_repository:
+        repo: 'deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main'
+        state: present
+        update_cache: yes
+      tags:
+        - google
+    - name: Install Google Chrome
+      apt: 
+        name: google-chrome-stable
+        state: present
+      tags: 
+        - google
+
+    - name: Ensure dconf-cli is installed
+      apt:
+        name: dconf-cli
+        state: present
+      tags:
+        - terminal
+
+    - name: Copy GNOME Terminal settings
+      copy:
+        src: gnome_terminal_settings_backup.txt
+        dest: /tmp/gnome_terminal_settings_backup.txt
+      tags:
+        - terminal
+
+    - name: Load GNOME Terminal settings
+      shell: dconf load /org/gnome/terminal/ < /tmp/gnome_terminal_settings_backup.txt
+      tags: 
+        - terminal
