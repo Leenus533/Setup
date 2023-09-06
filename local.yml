@@ -73,7 +73,11 @@
     - name: Install latest node
       shell: n latest
       tags: node
-
+    - name: Install pnpm
+      npm:
+        name: pnpm
+        global: true
+      tags: node
     - name: Ensure .ssh directory exists.
       become_user: root
       file:
