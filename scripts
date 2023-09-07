@@ -1,1 +1,2 @@
 dconf load /org/gnome/terminal/ < ./gnome_terminal_settings_backup.txt
+sed -i 's/^plugins=(git)$/plugins=(git zsh-autosuggestions)/' "$HOME/.zshrc"

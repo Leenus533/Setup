@@ -1,4 +1,5 @@
     - name: Install node
+      become: yes
       apt:
         name: [nodejs, npm]
       tags: node
@@ -7,6 +8,7 @@
       npm:
         name: n
         global: true
+      tags: node
 
     - name: Install latest node
       shell: n latest

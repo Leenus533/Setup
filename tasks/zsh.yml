@@ -1,7 +1,13 @@
     - name: Install ZSH
       apt: name=zsh
       tags: zsh
-
+    
+    - name: Change shell to zsh for copperr
+      shell: chsh -s $(which zsh)
+      become: yes
+      become_user: copperr
+      tags: zsh
+    
     - name: Check that the somefile.conf exists
       stat:
         path: /home/copperr/.oh-my-zsh
@@ -20,9 +26,3 @@
         dest: "~/.oh-my-zsh/plugins/zsh-autosuggestions"
       tags: zsh
 
-    - name: update zshrc
-      lineinfile:
-        path: ~/.zshrc
-        regexp: '^plugins=\(git\)'
-        line: 'plugins=(git zsh-autosuggestions)'
-      tags: zsh
