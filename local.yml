@@ -1,180 +1,20 @@
 - hosts: localhost
-  become: yes
-  pre_tasks:
-    - name: Update apt cache
-      apt:
-        update_cache: true
-      tags:
-        - always
-        - node
-        - zsh
   vars:
-    ansible_user: "{{ lookup('env', 'USER') }}"
     source_key: "./.ssh/id_ed25519"
     dest_key: "{{ lookup('env', 'HOME') }}/.ssh/id_ed25519"
-  vars_prompt:
-    - name: "my_password"
-      prompt: "Enter password"
-      private: yes
+  pre_tasks:
+  - name: Update Apt
+    become: true
+    apt:
+      force_apt_get: true
+      update_cache: true
+      state: present
+    tags:
+      - install
+      - core
   tasks:
-    - name: Install zsh
-      apt:
-        name: zsh
-      tags: zsh
-
-    - name: Check if /usr/bin/zsh exists
-      stat:
-        path: /usr/bin/zsh
-      register: zsh_stat
-      tags: zsh
-
-    - name: Check oh_my_zsh exists
-      stat:
-        path: /home/{{ ansible_user }}/.oh-my-zsh
-      register: oh_my_zsh_stat
-      tags: zsh
-
-    - name: Change shell directly in /etc/passwd
-      expect:
-        command: chsh -s $(which zsh)
-        responses:
-          (?i)password: "{{ my_password }}"
-      when: not zsh_stat.stat.exists
-      tags: zsh
-
-    - name: Install oh-my-zsh
-      shell: curl -L https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh > ~/.oh-my-installer && chmod +x ~/.oh-my-installer && ~/.oh-my-installer
-      when: not oh_my_zsh_stat.stat.exists
-      tags: zsh
-
-    - name: Install zsh plugins
-      ansible.builtin.git:
-        repo: "https://github.com/zsh-users/zsh-autosuggestions.git"
-        dest: "~/.oh-my-zsh/plugins/zsh-autosuggestions"
-      tags: zsh
-
-    - name: update zshrc
-      blockinfile:
-        path: ~/.zshrc
-        block: |
-          plugins=(git zsh-autosuggestions)
-      tags: zsh
-
-    - name: Install node
-      apt:
-        name: [nodejs, npm]
-      tags: node
-
-    - name: Install n
-      npm:
-        name: n
-        global: true
-
-    - name: Install latest node
-      shell: n latest
-      tags: node
-    - name: Install pnpm
-      npm:
-        name: pnpm
-        global: true
-      tags: node
-    - name: Install Typescript
-      npm: 
-        name: typescript
-        global: true
-      tags: node
-    - name: Install Nodemon
-      npm:
-        name: nodemon
-        global: true
-      tags: node
-    - name: Ensure .ssh directory exists.
-      become_user: root
-      file:
-        dest: "{{ dest_key | dirname }}"
-        mode: 0700
-        state: directory
-      tags:
-        - dotfiles
-        - ssh
-
-    - name: Install ssh key
-      become_user: root
-      copy:
-        src: "{{ source_key }}"
-        dest: "{{ dest_key }}"
-        mode: 0600
-      tags:
-        - dotfiles
-        - ssh
-    - name: Install ssh key public
-      copy:
-        src: "{{ source_key }}.pub"
-        dest: "{{ dest_key }}.pub"
-        mode: 0644
-      tags:
-        - dotfiles
-        - install
-        - ssh
-
-    - name: Set authorized key took from file
-      authorized_key:
-        user: "{{ lookup('env', 'USER') }}"
-        state: present
-        key: "{{ lookup('file', lookup('env', 'HOME') + '/.ssh/id_ed25519.pub') }}"
-      tags:
-        - ssh
-
-    - name: Git
-      git_config:
-        name: user.email
-        scope: global
-        value: "leenus533687@gmail.com"
-      tags:
-      - git
-
-    - name: Git setup name
-      git_config:
-        name: user.name
-        scope: global
-        value: "Leenus533"
-      tags:
-      - git
-    - name: Get Google Chrome
-      apt_key:
-        url: https://dl.google.com/linux/linux_signing_key.pub
-        state: present
-      tags:
-        - google
-    - name: Add Google Chrome repository
-      apt_repository:
-        repo: 'deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main'
-        state: present
-        update_cache: yes
-      tags:
-        - google
-    - name: Install Google Chrome
-      apt: 
-        name: google-chrome-stable
-        state: present
-      tags: 
-        - google
-
-    - name: Ensure dconf-cli is installed
-      apt:
-        name: dconf-cli
-        state: present
-      tags:
-        - terminal
-
-    - name: Copy GNOME Terminal settings
-      copy:
-        src: gnome_terminal_settings_backup.txt
-        dest: /tmp/gnome_terminal_settings_backup.txt
-      tags:
-        - terminal
-
-    - name: Load GNOME Terminal settings
-      shell: dconf load /org/gnome/terminal/ < /tmp/gnome_terminal_settings_backup.txt
-      tags: 
-        - terminal
+    - import_tasks: tasks/ssh.yml
+    - import_tasks: tasks/node.yml
+    - import_tasks: tasks/git.yml
+    - import_tasks: tasks/google.yml
+    - import_tasks: tasks/zsh.yml
