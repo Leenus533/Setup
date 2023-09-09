@@ -1,28 +1,41 @@
-    - name: Install ZSH
-      apt: name=zsh
-      tags: zsh
-    
-    - name: Change shell to zsh for copperr
-      shell: chsh -s $(which zsh)
-      become: yes
-      become_user: copperr
-      tags: zsh
-    
-    - name: Check that the somefile.conf exists
-      stat:
-        path: /home/copperr/.oh-my-zsh
-      register: oh_my_stats
-      tags: zsh
+- name: Install ZSH
+  apt: name=zsh
+  tags: zsh
 
-    - name: Oh-My-Zsh
-      shell: curl -L https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh > ~/.oh-my-installer && chmod +x ~/.oh-my-installer && ~/.oh-my-installer
-      tags: zsh
-      when: oh_my_stats.stat.exists == False
-      become_user: copperr
+- name: Change shell to zsh for copperr
+  shell: chsh -s $(which zsh)
+  become: yes
+  become_user: copperr
+  tags: zsh
 
-    - name: Install zsh-autosuggestions
-      ansible.builtin.git:
-        repo: 'https://github.com/zsh-users/zsh-autosuggestions.git'
-        dest: "~/.oh-my-zsh/plugins/zsh-autosuggestions"
-      tags: zsh
+- name: Check that the somefile.conf exists
+  stat:
+    path: /home/copperr/.oh-my-zsh
+  register: oh_my_stats
+  tags: zsh
 
+- name: Oh-My-Zsh
+  shell: curl -L https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh > ~/.oh-my-installer && chmod +x ~/.oh-my-installer && ~/.oh-my-installer
+  tags: zsh
+  when: oh_my_stats.stat.exists == False
+  become_user: copperr
+
+- name: Install zsh-autosuggestions
+  ansible.builtin.git:
+    repo: "https://github.com/zsh-users/zsh-autosuggestions.git"
+    dest: "~/.oh-my-zsh/plugins/zsh-autosuggestions"
+  tags: zsh
+
+- name: Install tmux
+  apt: name=tmux
+  tags: zsh
+
+- name: Install fzf
+  apt: name=fzf
+  tags: zsh
+
+- name: Add alias for fzf
+  lineinfile:
+    path: /home/copperr/.zshrc
+    line: alias sd="cd ~ && cd \$(find * -type d | fzf)"
+  tags: zsh
