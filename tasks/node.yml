@@ -13,16 +13,17 @@
 - name: Install latest node
   shell: n latest
   tags: node
-- name: Install pnpm
-  npm:
-    name: pnpm
-    global: true
-  tags: node
+
+- name: Install bun
+  ansible.builtin.shell:
+    cmd: "curl -fsSL https://bun.sh/install | bash"
+
 - name: Install Typescript
   npm:
     name: typescript
     global: true
   tags: node
+
 - name: Install Nodemon
   npm:
     name: nodemon
