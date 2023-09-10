@@ -17,6 +17,7 @@
 - name: Install bun
   ansible.builtin.shell:
     cmd: "curl -fsSL https://bun.sh/install | bash"
+  tags: node
 
 - name: Install Typescript
   npm:
