@@ -20,3 +20,4 @@
     - import_tasks: tasks/git.yml
 #    - import_tasks: tasks/google.yml
     - import_tasks: tasks/zsh.yml
+    - import_tasks: tasks/custom.yml

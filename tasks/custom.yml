@@ -1,0 +1,17 @@
+
+- name: Install feh
+  become: true
+  pacman:
+    name: feh
+    state: present
+
+- name: Copy background image to Pictures
+  ansible.builtin.shell:
+    cmd: cp ./background.png $HOME/Pictures/background.png
+  tags: i3
+
+- name: Add feh to i3 config if it dosnt exist
+  ansible.builtin.lineinfile:
+    path: $HOME/.i3/config
+    line: "exec --no-startup-id feh --bg-scale $HOME/Pictures/background.png"
+  tags: i3

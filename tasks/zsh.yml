@@ -5,11 +5,10 @@
     state: present
   tags: zsh
 
-- name: Change shell to zsh for copperr
-  ansible.builtin.user:
-    name: copperr
-    shell: /bin/zsh
-  become: yes
+- name: Change default shell to zsh for copperr
+  ansible.builtin.command:
+    cmd: chsh -s /bin/zsh copperr
+    become: yes
   tags: zsh
 
 - name: Check that the ~/.oh-my-zsh directory exists
