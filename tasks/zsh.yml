@@ -1,21 +1,26 @@
 - name: Install ZSH
-  apt: name=zsh
+  become: yes
+  ansible.builtin.package:
+    name: zsh
+    state: present
   tags: zsh
 
 - name: Change shell to zsh for copperr
-  shell: chsh -s $(which zsh)
+  ansible.builtin.user:
+    name: copperr
+    shell: /bin/zsh
   become: yes
-  become_user: copperr
   tags: zsh
 
-- name: Check that the somefile.conf exists
-  stat:
+- name: Check that the ~/.oh-my-zsh directory exists
+  ansible.builtin.stat:
     path: /home/copperr/.oh-my-zsh
   register: oh_my_stats
   tags: zsh
 
-- name: Oh-My-Zsh
-  shell: curl -L https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh > ~/.oh-my-installer && chmod +x ~/.oh-my-installer && ~/.oh-my-installer
+- name: Install Oh-My-Zsh
+  ansible.builtin.shell:
+    cmd: curl -L https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh > ~/.oh-my-installer && chmod +x ~/.oh-my-installer && ~/.oh-my-installer
   tags: zsh
   when: oh_my_stats.stat.exists == False
   become_user: copperr
@@ -23,43 +28,52 @@
 - name: Install zsh-autosuggestions
   ansible.builtin.git:
     repo: "https://github.com/zsh-users/zsh-autosuggestions.git"
-    dest: "~/.oh-my-zsh/plugins/zsh-autosuggestions"
+    dest: "/home/copperr/.oh-my-zsh/plugins/zsh-autosuggestions"
   tags: zsh
 
 - name: Install tmux
-  apt: name=tmux
+  become: yes
+  ansible.builtin.package:
+    name: tmux
+    state: present
   tags: zsh
 
 - name: Install fzf
-  apt: name=fzf
+  become: yes
+  ansible.builtin.package:
+    name: fzf
+    state: present
   tags: zsh
 
 - name: Add alias for fzf
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /home/copperr/.zshrc
-    line: alias sd="cd ~ && cd \$(find * -type d | fzf)"
+    line: "alias sd='cd ~ && cd $(find * -type d | fzf)'"
   tags: zsh
 
 - name: Ensure ~/.local/bin/ directory exists
-  file:
-    path: "~/.local/bin/"
+  ansible.builtin.file:
+    path: "/home/copperr/.local/bin/"
     state: directory
     mode: "0755"
   tags: zsh
 
 - name: Copy tmux-sessionizer to $HOME/bin/
-  copy:
+  ansible.builtin.copy:
     src: ./tmux-sessionizer
-    dest: "~/.local/bin/tmux-sessionizer"
+    dest: "/home/copperr/.local/bin/tmux-sessionizer"
     mode: "0755"
   tags: zsh
 
 - name: Add Shortcut
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /home/copperr/.zshrc
-    line: bindkey -s ^f "tmux-sessionizer\n"
+    line: "bindkey -s '^f' 'tmux-sessionizer\n'"
   tags: zsh
 
-- name: Add autorandr
-  apt: name=autorandr
+- name: Install autorandr
+  become: yes
+  ansible.builtin.package:
+    name: autorandr
+    state: present
   tags: zsh

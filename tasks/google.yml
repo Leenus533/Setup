@@ -1,19 +1,20 @@
-- name: Get Google Chrome
-  apt_key:
-    url: https://dl.google.com/linux/linux_signing_key.pub
+- name: Install yay (if not already present)  # For installing Google Chrome on Arch
+  become: yes
+  pacman:
+    name: yay
     state: present
-  tags:
-    - google
-- name: Add Google Chrome repository
-  apt_repository:
-    repo: "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main"
-    state: present
-    update_cache: yes
-  tags:
-    - google
-- name: Install Google Chrome
+  when: ansible_os_family == "Archlinux"  # Only for Arch
+
+  
+- name: Install Google Chrome (from AUR) using yay # Using AUR on Arch
+  become: yes
+  ansible.builtin.command:
+    cmd: yay -S --noconfirm google-chrome-stable
+  when: ansible_os_family == "Archlinux"  # Only for Arch
+
+- name: Install Google Chrome (for Ubuntu/Debian)  # Using apt on Ubuntu/Debian
+  become: yes
   apt:
     name: google-chrome-stable
     state: present
-  tags:
-    - google
+  when: ansible_os_family == "Debian"  # Only for Ubuntu/Debian
