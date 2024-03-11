@@ -15,3 +15,9 @@
     path: $HOME/.i3/config
     line: "exec --no-startup-id feh --bg-scale $HOME/Pictures/background.png"
   tags: i3
+
+- name: install visual studio code using yay
+  become: yes
+  ansible.builtin.command:
+    cmd: yay -S --noconfirm visual-studio-code-bin
+  when: ansible_os_family == "Archlinux"

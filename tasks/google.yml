@@ -1,20 +1,20 @@
-- name: Install yay (if not already present)  # For installing Google Chrome on Arch
+- name: Install yay (if not already present)
   become: yes
   pacman:
     name: yay
     state: present
-  when: ansible_os_family == "Archlinux"  # Only for Arch
+  when: ansible_os_family == "Archlinux" 
 
   
-- name: Install Google Chrome (from AUR) using yay # Using AUR on Arch
+- name: Install Google Chrome (from AUR) using yay
   become: yes
   ansible.builtin.command:
     cmd: yay -S --noconfirm google-chrome-stable
-  when: ansible_os_family == "Archlinux"  # Only for Arch
+  when: ansible_os_family == "Archlinux" 
 
-- name: Install Google Chrome (for Ubuntu/Debian)  # Using apt on Ubuntu/Debian
+- name: Install Google Chrome (for Ubuntu/Debian)
   become: yes
   apt:
     name: google-chrome-stable
     state: present
-  when: ansible_os_family == "Debian"  # Only for Ubuntu/Debian
+  when: ansible_os_family == "Debian"

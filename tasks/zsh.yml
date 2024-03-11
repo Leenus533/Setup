@@ -30,6 +30,14 @@
     dest: "/home/copperr/.oh-my-zsh/plugins/zsh-autosuggestions"
   tags: zsh
 
+- name: Add zsh-autosuggestions to plugins in .zshrc
+  ansible.builtin.lineinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    regexp: '^plugins=\(git\)$'
+    line: 'plugins=(git zsh-autosuggestions)'
+    backrefs: yes
+  tags: zsh
+
 - name: Install tmux
   become: yes
   ansible.builtin.package:
