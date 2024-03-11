@@ -5,15 +5,9 @@
     name: feh
     state: present
 
-- name: Copy background image to Pictures
+- name: Copy background to /usr/share/backgrounds/
   ansible.builtin.shell:
-    cmd: cp ./background.png $HOME/Pictures/background.png
-  tags: i3
-
-- name: Add feh to i3 config if it dosnt exist
-  ansible.builtin.lineinfile:
-    path: $HOME/.i3/config
-    line: "exec --no-startup-id feh --bg-scale $HOME/Pictures/background.png"
+    cmd: cp ./background.png /usr/share/backgrounds/
   tags: i3
 
 - name: install visual studio code using yay
@@ -21,3 +15,15 @@
   ansible.builtin.command:
     cmd: yay -S --noconfirm visual-studio-code-bin
   when: ansible_os_family == "Archlinux"
+
+- name: Install Alacritty
+  become: true
+  pacman:
+    name: alacritty
+    state: present
+
+- name: Install neovim
+  become: true
+  pacman:
+    name: neovim
+    state: present

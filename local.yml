@@ -22,3 +22,4 @@
     - import_tasks: tasks/custom.yml
     - import_tasks: tasks/node.yml
     - import_tasks: tasks/display.yml
+    - import_tasks: tasks/dotfiles.yml

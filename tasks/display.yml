@@ -14,4 +14,6 @@
   ansible.builtin.command:
     cmd: autorandr --save workstation
   tags: display
+  become: yes
+  become_user: copperr
 
