@@ -26,10 +26,11 @@
   tags: node
   
 - name: Install bun
-  become: yes 
+  become_user: copperr
   ansible.builtin.shell:
     cmd: "curl -fsSL https://bun.sh/install | bash"
   tags: node
+
 
 - name: Install TypeScript
   become: yes

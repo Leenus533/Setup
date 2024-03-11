@@ -30,13 +30,26 @@
     dest: "/home/copperr/.oh-my-zsh/plugins/zsh-autosuggestions"
   tags: zsh
 
+
+- name: Clone zsh-fzf-history-search repository
+  ansible.builtin.git:
+    repo: "https://github.com/joshskidmore/zsh-fzf-history-search.git"
+    dest: "{{ ZSH_CUSTOM | default('~/.oh-my-zsh/custom') }}/plugins/zsh-fzf-history-search"
+  tags:
+    - zsh
+  become: yes
+  become_user: copperr
+
+
 - name: Add zsh-autosuggestions to plugins in .zshrc
   ansible.builtin.lineinfile:
     path: "{{ ansible_env.HOME }}/.zshrc"
     regexp: '^plugins=\(git\)$'
-    line: 'plugins=(git zsh-autosuggestions)'
+    line: 'plugins=(git zsh-autosuggestions zsh-fzf-history-search)'
     backrefs: yes
   tags: zsh
+
+
 
 - name: Install tmux
   become: yes
@@ -76,11 +89,4 @@
   ansible.builtin.lineinfile:
     path: /home/copperr/.zshrc
     line: "bindkey -s '^f' 'tmux-sessionizer\n'"
-  tags: zsh
-
-- name: Install autorandr
-  become: yes
-  ansible.builtin.package:
-    name: autorandr
-    state: present
   tags: zsh
