@@ -56,3 +56,10 @@
     name: fzf
     state: present
   tags: zsh
+
+- name: Install zoxide
+  become: yes
+  ansible.builtin.package:
+    name: zoxide
+    state: present
+  tags: zsh
