@@ -18,3 +18,16 @@
     name: google-chrome-stable
     state: present
   when: ansible_os_family == "Debian"
+
+- name: Install Discord for Aur
+  become: yes
+  ansible.builtin.command:
+    cmd: yay -S --noconfirm discord
+  when: ansible_os_family == "Archlinux"
+
+- name: Install Discord for Ubuntu/Debian
+  become: yes
+  apt:
+    name: discord
+    state: present
+  when: ansible_os_family == "Debian"
