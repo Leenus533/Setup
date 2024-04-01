@@ -38,3 +38,9 @@
   pacman:
     name: go
     state: present
+
+- name: Install docker
+  become: true
+  pacman:
+    name: docker
+    state: present
