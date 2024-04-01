@@ -9,7 +9,17 @@
   become: true
   ansible.builtin.shell:
     cmd: cp ./background.png /usr/share/backgrounds/
-  tags: i3
+  
+
+- name: Swap image names
+  command: mv /usr/share/backgrounds/{{ item.old }} /usr/share/backgrounds/{{ item.new }}
+  loop:
+    - { old: 'blackcat.jpg', new: 'i3_default_background.jpg.tmp' }
+    - { old: 'i3_default_background.jpg', new: 'blackcat.jpg' }
+    - { old: 'i3_default_background.jpg.tmp', new: 'i3_default_background.jpg' }
+  become: true
+  tags: background
+  ignore_errors: true
 
 - name: Install Alacritty
   become: true
