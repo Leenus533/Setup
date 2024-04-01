@@ -7,7 +7,6 @@
 
   
 - name: Install Google Chrome (from AUR) using yay
-  become: yes
   ansible.builtin.command:
     cmd: yay -S --noconfirm google-chrome-stable
   when: ansible_os_family == "Archlinux" 
@@ -31,3 +30,8 @@
     name: discord
     state: present
   when: ansible_os_family == "Debian"
+
+- name: install visual studio code using yay
+  ansible.builtin.command:
+    cmd: yay -S --noconfirm visual-studio-code-bin
+  when: ansible_os_family == "Archlinux"

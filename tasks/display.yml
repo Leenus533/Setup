@@ -16,4 +16,5 @@
   tags: display
   become: yes
   become_user: copperr
+  ignore_errors: true
 

@@ -6,15 +6,10 @@
     state: present
 
 - name: Copy background to /usr/share/backgrounds/
+  become: true
   ansible.builtin.shell:
     cmd: cp ./background.png /usr/share/backgrounds/
   tags: i3
-
-- name: install visual studio code using yay
-  become: yes
-  ansible.builtin.command:
-    cmd: yay -S --noconfirm visual-studio-code-bin
-  when: ansible_os_family == "Archlinux"
 
 - name: Install Alacritty
   become: true

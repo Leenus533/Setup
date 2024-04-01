@@ -1,3 +1,9 @@
+- name: Add GitHub to known hosts
+  ansible.builtin.known_hosts:
+    name: github.com
+    key: "{{ lookup('pipe', 'ssh-keyscan -t rsa github.com') }}"
+    state: present
+
 - name: Clone Dotfiles Repository
   git:
     repo: git@github.com:Leenus533/.dotfiles.git
@@ -13,8 +19,22 @@
   become: yes
   tags: dotfiles
 
+
+- name: Remove .zshrc file
+  ansible.builtin.file:
+    path: ~/.zshrc
+    state: absent
+  tags: dotfiles
+
+- name: Remove .i3/config file
+  ansible.builtin.file:
+    path: ~/.i3/config
+    state: absent
+  tags: dotfiles
+
 - name: Stow dotfiles
   ansible.builtin.shell:
     cmd: stow -t ~ -d ~/.dotfiles
   become_user: copperr
   tags: dotfiles
+  ignore_errors: true
