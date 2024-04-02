@@ -19,7 +19,7 @@
   when: ansible_os_family == "Debian"
 
 - name: Install Discord for Aur
-  become: yes
+  become_user: copperr
   ansible.builtin.command:
     cmd: yay -S --noconfirm discord
   when: ansible_os_family == "Archlinux"
@@ -32,6 +32,12 @@
   when: ansible_os_family == "Debian"
 
 - name: install visual studio code using yay
+  become_user: copperr
   ansible.builtin.command:
     cmd: yay -S --noconfirm visual-studio-code-bin
+  when: ansible_os_family == "Archlinux"
+
+- name: install youtube music app
+  ansible.builtin.command:
+    cmd: yay -S --noconfirm youtube-music
   when: ansible_os_family == "Archlinux"
