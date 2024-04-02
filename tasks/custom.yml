@@ -1,7 +1,7 @@
 
 - name: Install feh
   become: true
-  pacman:
+  ansible.builtin.package:
     name: feh
     state: present
 
@@ -23,24 +23,24 @@
 
 - name: Install Alacritty
   become: true
-  pacman:
+  ansible.builtin.package:
     name: alacritty
     state: present
 
 - name: Install neovim
   become: true
-  pacman:
+  ansible.builtin.package:
     name: neovim
     state: present
 
 - name: Install go
   become: true
-  pacman:
+  ansible.builtin.package:
     name: go
     state: present
 
 - name: Install docker
   become: true
-  pacman:
+  ansible.builtin.package:
     name: docker
     state: present
