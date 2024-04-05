@@ -21,6 +21,14 @@
   tags: background
   ignore_errors: true
 
+- name: Enable and start systemd-timesyncd service
+  become: true
+  ansible.builtin.systemd:
+    name: systemd-timesyncd
+    state: started
+    enabled: yes
+  ignore_errors: true
+
 - name: Install Alacritty
   become: true
   ansible.builtin.package:
