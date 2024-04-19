@@ -4,7 +4,8 @@
     name: [nodejs, npm]  
     state: present 
   when: ansible_os_family in ["Debian", "Archlinux"] 
-  tags: node  
+  tags: node 
+  ignore_errors: true
 
 - name: Install n (Node Version Manager)
   become: yes
@@ -12,11 +13,13 @@
     name: n
     global: true
   tags: node
+  ignore_errors: true
 
 - name: Install latest Node.js using n
   become: yes 
   shell: n latest
   tags: node
+  ignore_errors: true
 
 - name: Install unzip
   become: yes
@@ -30,6 +33,7 @@
   ansible.builtin.shell:
     cmd: "curl -fsSL https://bun.sh/install | bash"
   tags: node
+  ignore_errors: true
 
 
 - name: Install TypeScript
@@ -38,6 +42,7 @@
     name: typescript
     global: true
   tags: node
+  ignore_errors: true
 
 - name: Install Nodemon
   become: yes
@@ -45,3 +50,4 @@
     name: nodemon
     global: true
   tags: node
+  ignore_errors: true
