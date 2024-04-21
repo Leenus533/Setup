@@ -52,3 +52,10 @@
   ansible.builtin.package:
     name: docker
     state: present
+
+- name: Install wmctrl
+  become: true
+  ansible.builtin.package:
+    name: wmctrl
+    state: present
+
