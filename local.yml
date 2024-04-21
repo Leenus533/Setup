@@ -4,18 +4,13 @@
     dest_key: "{{ lookup('env', 'HOME') }}/.ssh/id_ed25519"
     oh_my_zsh_dir: "{{ '/home/' + ansible_user_id + '/.oh-my-zsh' if ansible_distribution != 'MacOSX' else '/Users/' + ansible_user_id + '/.oh-my-zsh' }}"
     zsh_plugins_dir: "{{ oh_my_zsh_dir + '/custom/plugins' }}"
+    become_user_id: "{{ ansible_user_id if ansible_distribution == 'MacOSX' else omit }}"
   pre_tasks:
     - name: Update package manager cache
-      when: ansible_os_family == "Debian"
       become: true
-      apt:
+      ansible.builtin.package:
         update_cache: true
 
-    - name: Update package manager cache 
-      when: ansible_os_family == "Archlinux"
-      become: true 
-      pacman:
-        update_cache: yes 
   tasks:
     - import_tasks: tasks/ssh.yml
     - import_tasks: tasks/git.yml

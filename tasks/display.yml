@@ -4,18 +4,23 @@
     name: autorandr
     state: present
   tags: display
+  when: ansible_distribution != "MacOSX"
 
 - name: Configure display settings
   ansible.builtin.command:
     cmd: xrandr --output DP-2 --primary --mode 1920x1080 --rate 237.76 --output DP-0 --mode 1920x1080 --rate 144.00 --right-of DP-2
   tags: display
   ignore_errors: true
+  when: ansible_distribution != "MacOSX"
+
 
 - name: Save display configuration
   ansible.builtin.command:
     cmd: autorandr --save workstation
   tags: display
   become: yes
-  become_user: copperr
+  become_user: "{{ ansible_user_id }}"
   ignore_errors: true
+  when: ansible_distribution != "MacOSX"
+
 

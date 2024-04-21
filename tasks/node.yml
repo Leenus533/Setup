@@ -1,9 +1,8 @@
 - name: Install core Node.js dependencies
   become: yes
-  package:
-    name: [nodejs, npm]  
+  ansible.builtin.package:
+    name: [nodejs, npm, unzip]  
     state: present 
-  when: ansible_os_family in ["Debian", "Archlinux"] 
   tags: node 
   ignore_errors: true
 
@@ -20,13 +19,6 @@
   shell: n latest
   tags: node
   ignore_errors: true
-
-- name: Install unzip
-  become: yes
-  package:
-    name: unzip
-    state: present
-  tags: node
   
 - name: Install bun
   become_user: copperr
@@ -34,7 +26,6 @@
     cmd: "curl -fsSL https://bun.sh/install | bash"
   tags: node
   ignore_errors: true
-
 
 - name: Install TypeScript
   become: yes

@@ -4,12 +4,14 @@
   ansible.builtin.package:
     name: feh
     state: present
+  when: ansible_distribution != "MacOSX"
 
 - name: Copy background to /usr/share/backgrounds/
   become: true
   ansible.builtin.shell:
     cmd: cp ./background.png /usr/share/backgrounds/
-  
+  when: ansible_distribution != "MacOSX"
+
 
 - name: Swap image names
   command: mv /usr/share/backgrounds/{{ item.old }} /usr/share/backgrounds/{{ item.new }}
@@ -19,6 +21,7 @@
     - { old: 'i3_default_background.jpg.tmp', new: 'i3_default_background.jpg' }
   become: true
   tags: background
+  when: ansible_distribution != "MacOSX" 
   ignore_errors: true
 
 - name: Enable and start systemd-timesyncd service
@@ -28,32 +31,18 @@
     state: started
     enabled: yes
   ignore_errors: true
+  when: ansible_distribution != "MacOSX"
 
-- name: Install Packages
+
+- name: Install alacritty, neovim , go, docker
   become: yes
   become_user: "{{ ansible_user_id if ansible_distribution == 'MacOSX' else omit}}"
   ansible.builtin.package:
-    name: alacritty
-    state: present
-  tags:
-   - test
-
-- name: Install neovim
-  become: true
-  ansible.builtin.package:
-    name: neovim
-    state: present
-
-- name: Install go
-  become: true
-  ansible.builtin.package:
-    name: go
-    state: present
-
-- name: Install docker
-  become: true
-  ansible.builtin.package:
-    name: docker
+    name: 
+     - alacritty
+     - neovim
+     - go
+     - docker
     state: present
 
 - name: Install wmctrl
@@ -61,4 +50,5 @@
   ansible.builtin.package:
     name: wmctrl
     state: present
+  when: ansible_distribution != "MacOSX"
 

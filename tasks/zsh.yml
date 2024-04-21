@@ -1,19 +1,9 @@
 - name: Install ZSH
-  block:
-    - name: Install ZSH (Linux)
-      become: yes
-      ansible.builtin.package:
-        name: zsh
-        state: present
-      when: ansible_distribution != "MacOSX"
-
-    - name: Install ZSH (macOS)
-      ansible.builtin.homebrew:
-        name: zsh
-        state: present
-      become: yes
-      become_user: "{{ ansible_user_id }}"
-      when: ansible_distribution == "MacOSX"
+  become: yes
+  become_user: "{{ become_user_id }}"
+  ansible.builtin.package:
+     name: zsh
+     state: present
   tags: zsh
 
 - name: Change default shell to zsh for current user
@@ -29,18 +19,9 @@
   tags: zsh
 
 - name: Install Oh-My-Zsh
-  block:
-    - name: Install Oh-My-Zsh (Linux)
-      ansible.builtin.shell:
-        cmd: curl -L https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh > ~/.oh-my-installer && chmod +x ~/.oh-my-installer && ~/.oh-my-installer
-      when: ansible_distribution != "MacOSX"
-      become_user: "{{ ansible_user_id }}"
-
-    - name: Install Oh-My-Zsh (macOS)
-      ansible.builtin.shell:
-        cmd: sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-      when: ansible_distribution == "MacOSX"
-      become_user: "{{ ansible_user_id }}"
+  ansible.builtin.shell:
+    cmd: "{{ 'curl -L https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh > ~/.oh-my-installer && chmod +x ~/.oh-my-installer && ~/.oh-my-installer' if ansible_distribution != 'MacOSX' else 'sh -c \"$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)\"' }}"
+  become_user: "{{ ansible_user_id }}"
   tags: zsh
   when: oh_my_stats.stat.exists == False
 
@@ -60,56 +41,14 @@
   become: yes
   become_user: "{{ ansible_user_id }}"
 
-- name: Install tmux
-  block:
-    - name: Install tmux (Linux)
-      become: yes
-      ansible.builtin.package:
-        name: tmux
-        state: present
-      when: ansible_distribution != "MacOSX"
-
-    - name: Install tmux (macOS)
-      ansible.builtin.homebrew:
-        name: tmux
-        state: present
-      become: yes
-      become_user: "{{ ansible_user_id }}"
-      when: ansible_distribution == "MacOSX"
+- name: Install tmux, fzf, zoxide
+  become: yes
+  become_user: "{{ become_user_id }}"
+  ansible.builtin.package:
+    name: 
+     - tmux
+     - fzf
+     - zoxide
+    state: present
   tags: zsh
-
-- name: Install fzf
-  block:
-    - name: Install fzf (Linux)
-      become: yes
-      ansible.builtin.package:
-        name: fzf
-        state: present
-      when: ansible_distribution != "MacOSX"
-
-    - name: Install fzf (macOS)
-      ansible.builtin.homebrew:
-        name: fzf
-        state: present
-      become: yes
-      become_user: "{{ ansible_user_id }}"
-      when: ansible_distribution == "MacOSX"
-  tags: zsh
-
-- name: Install zoxide
-  block:
-    - name: Install zoxide (Linux)
-      become: yes
-      ansible.builtin.package:
-        name: zoxide
-        state: present
-      when: ansible_distribution != "MacOSX"
-
-    - name: Install zoxide (macOS)
-      ansible.builtin.homebrew:
-        name: zoxide
-        state: present
-      become: yes
-      become_user: "{{ ansible_user_id }}"
-      when: ansible_distribution == "MacOSX"
-  tags: zsh
+  ignore_errors: yes 
