@@ -29,11 +29,14 @@
     enabled: yes
   ignore_errors: true
 
-- name: Install Alacritty
-  become: true
+- name: Install Packages
+  become: yes
+  become_user: "{{ ansible_user_id if ansible_distribution == 'MacOSX' else omit}}"
   ansible.builtin.package:
     name: alacritty
     state: present
+  tags:
+   - test
 
 - name: Install neovim
   become: true
