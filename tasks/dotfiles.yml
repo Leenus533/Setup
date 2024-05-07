@@ -9,6 +9,7 @@
     repo: git@github.com:Leenus533/.dotfiles.git
     dest: ~/.dotfiles
     version: main
+    force: yes
   become_user: "{{ ansible_user_id }}"
   tags: dotfiles
 
