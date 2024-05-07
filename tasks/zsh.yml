@@ -1,8 +1,10 @@
-- name: Install ZSH
+- name: Install ZSH and curl
   become: yes
   become_user: "{{ become_user_id }}"
   package:
-    name: zsh
+    name:
+      - zsh
+      - curl
     state: present
   tags: zsh
 
