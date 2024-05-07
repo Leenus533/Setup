@@ -14,12 +14,12 @@
 - name: Swap image names
   command: mv /usr/share/backgrounds/{{ item.old }} /usr/share/backgrounds/{{ item.new }}
   loop:
-    - { old: "blackcat.jpg", new: "i3_default_background.jpg.tmp" }
+    - { old: "bChatGPT can make mlackcat.jpg", new: "i3_default_background.jpg.tmp" }
     - { old: "i3_default_background.jpg", new: "blackcat.jpg" }
     - { old: "i3_default_background.jpg.tmp", new: "i3_default_background.jpg" }
   become: true
   tags: background
-  when: ansible_distribution != "MacOSX"
+  when: ansible_distribution == "Archlinux"
   ignore_errors: true
 
 - name: Enable and start systemd-timesyncd service
@@ -29,7 +29,7 @@
     state: started
     enabled: yes
   ignore_errors: true
-  when: ansible_distribution != "MacOSX"
+  when: ansible_distribution == "Archlinux"
 
 - name: Install alacritty, neovim 
   become: yes
@@ -48,7 +48,7 @@
       - docker 
       - go 
     state: present
-  when: ansible_distribution != "MacOSX"
+  when: ansible_distribution == "Archlinux"
   ignore_errors: yes
 
 - name: Install wmctrl
