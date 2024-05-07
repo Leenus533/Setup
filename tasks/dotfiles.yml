@@ -36,7 +36,6 @@
 
 - name: Stow dotfiles
   ansible.builtin.shell:
-    cmd: stow -t ~ -d ~/.dotfiles
+    cmd: /usr/bin/stow -t /home/{{ ansible_user_id }} -d /home/{{ ansible_user_id }}/.dotfiles
   become_user: "{{ ansible_user_id }}"
   tags: dotfiles
-  ignore_errors: true
