@@ -1,10 +1,10 @@
 - name: Install core Node.js dependencies
   become: yes
   become_user: "{{ become_user_id }}"
-  ansible.builtin.package:
-    name: [nodejs, npm, unzip]  
-    state: present 
-  tags: node 
+  package:
+    name: [nodejs, npm, unzip]
+    state: present
+  tags: node
   ignore_errors: true
 
 - name: Install n (Node Version Manager)
@@ -17,15 +17,15 @@
   ignore_errors: true
 
 - name: Install latest Node.js using n
-  become: yes 
+  become: yes
   become_user: "{{ become_user_id }}"
   shell: n latest
   tags: node
   ignore_errors: true
-  
+
 - name: Install bun
   become_user: "{{ ansible_user_id }}"
-  ansible.builtin.shell:
+  shell:
     cmd: "curl -fsSL https://bun.sh/install | bash"
   tags: node
   ignore_errors: true

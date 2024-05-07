@@ -1,5 +1,5 @@
 - name: Add GitHub to known hosts
-  ansible.builtin.known_hosts:
+  known_hosts:
     name: github.com
     key: "{{ lookup('pipe', 'ssh-keyscan -t rsa github.com') }}"
     state: present
@@ -14,7 +14,7 @@
   tags: dotfiles
 
 - name: Install stow
-  ansible.builtin.package:
+  package:
     name: stow
     state: present
   become: yes
@@ -23,19 +23,20 @@
   ignore_errors: yes
 
 - name: Remove .zshrc file
-  ansible.builtin.file:
+  file:
     path: ~/.zshrc
     state: absent
   tags: dotfiles
 
 - name: Remove .i3/config file
-  ansible.builtin.file:
+  file:
     path: ~/.i3/config
     state: absent
   tags: dotfiles
 
 - name: Stow dotfiles
-  ansible.builtin.shell:
-    cmd: /usr/bin/stow -t /home/{{ ansible_user_id }} -d /home/{{ ansible_user_id }}/.dotfiles
+  shell:
+    cmd: stow .
+    chdir: /home/{{ ansible_user_id }}/.dotfiles
   become_user: "{{ ansible_user_id }}"
   tags: dotfiles

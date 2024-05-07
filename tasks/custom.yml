@@ -1,61 +1,57 @@
-
 - name: Install feh
   become: true
-  ansible.builtin.package:
+  package:
     name: feh
     state: present
   when: ansible_distribution != "MacOSX"
 
 - name: Copy background to /usr/share/backgrounds/
   become: true
-  ansible.builtin.shell:
+  shell:
     cmd: cp ./background.png /usr/share/backgrounds/
   when: ansible_distribution != "MacOSX"
-
 
 - name: Swap image names
   command: mv /usr/share/backgrounds/{{ item.old }} /usr/share/backgrounds/{{ item.new }}
   loop:
-    - { old: 'blackcat.jpg', new: 'i3_default_background.jpg.tmp' }
-    - { old: 'i3_default_background.jpg', new: 'blackcat.jpg' }
-    - { old: 'i3_default_background.jpg.tmp', new: 'i3_default_background.jpg' }
+    - { old: "blackcat.jpg", new: "i3_default_background.jpg.tmp" }
+    - { old: "i3_default_background.jpg", new: "blackcat.jpg" }
+    - { old: "i3_default_background.jpg.tmp", new: "i3_default_background.jpg" }
   become: true
   tags: background
-  when: ansible_distribution != "MacOSX" 
+  when: ansible_distribution != "MacOSX"
   ignore_errors: true
 
 - name: Enable and start systemd-timesyncd service
   become: true
-  ansible.builtin.systemd:
+  systemd:
     name: systemd-timesyncd
     state: started
     enabled: yes
   ignore_errors: true
   when: ansible_distribution != "MacOSX"
 
-
 - name: Install alacritty, neovim , go, docker
   become: yes
   become_user: "{{ ansible_user_id if ansible_distribution == 'MacOSX' else omit}}"
-  ansible.builtin.package:
-    name: 
-     - alacritty
-     - neovim
-     - go
+  package:
+    name:
+      - alacritty
+      - neovim
+      - go
     state: present
   ignore_errors: yes
 
 - name: Install docker
   become: true
-  ansible.builtin.package:
+  package:
     name: docker
     state: present
   when: ansible_distribution != "MacOSX"
 
 - name: Install wmctrl
   become: true
-  ansible.builtin.package:
+  package:
     name: wmctrl
     state: present
   when: ansible_distribution != "MacOSX"
-
