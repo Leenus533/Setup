@@ -11,7 +11,7 @@
       ansible.builtin.package:
         update_cache: true
       when: ansible_distribution != "MacOSX"
-
+      ignore_errors: true
   tasks:
     - import_tasks: tasks/ssh.yml
     - import_tasks: tasks/git.yml
