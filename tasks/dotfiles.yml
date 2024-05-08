@@ -42,8 +42,9 @@
   tags: dotfiles
 
 - name: Create symbolic for nvim configuration
-  pfile:
+  file:
     src: "/home/{{ ansible_user_id }}/.config/nvim"
     dest: /root/.config/nvim
     state: link
   become: yes
+  tags: dotfiles
