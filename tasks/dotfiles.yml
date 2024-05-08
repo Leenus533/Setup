@@ -40,3 +40,10 @@
     chdir: /home/{{ ansible_user_id }}/.dotfiles
   become_user: "{{ ansible_user_id }}"
   tags: dotfiles
+
+- name: Create symbolic for nvim configuration
+  pfile:
+    src: "/home/{{ ansible_user_id }}/.config/nvim"
+    dest: /root/.config/nvim
+    state: link
+  become: yes
