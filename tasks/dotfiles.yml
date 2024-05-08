@@ -41,9 +41,16 @@
   become_user: "{{ ansible_user_id }}"
   tags: dotfiles
 
+- name: Create /root/.config
+  file:
+    path: /root/.config
+    state: directory
+  become: yes
+  tags: dotfiles
+
 - name: Create symbolic for nvim configuration
   file:
-    src: "/home/{{ ansible_user_id }}/.config/nvim"
+    src: /home/{{ ansible_user_id }}/.config/nvim
     dest: /root/.config/nvim
     state: link
   become: yes
