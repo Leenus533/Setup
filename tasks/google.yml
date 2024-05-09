@@ -1,12 +1,3 @@
-- name: Install Google Chrome (for Ubuntu/Debian)
-  become: yes
-  apt:
-    name:
-      - google-chrome-stable
-      - discord
-    state: present
-  when: ansible_os_family == "Debian"
-
 - name: Install yay (if not already present)
   become: yes
   pacman:
@@ -14,14 +5,12 @@
     state: present
   when: ansible_os_family == "Archlinux"
 
-- name: Install google, discord, visual-studio-code,youtube-music using yay
+- name: Install discord, visual-studio-code using yay
   become_user: "{{ ansible_user_id }}"
   command:
     cmd: "yay -S --noconfirm {{ item }}"
   loop:
-    - google-chrome-stable
     - discord
     - visual-studio-code-bin
-    - youtube-music-bin
   when: ansible_os_family == "Archlinux"
   ignore_errors: yes
