@@ -31,17 +31,18 @@
   ignore_errors: true
   when: ansible_distribution == "Archlinux"
 
-- name: Install alacritty, neovim
+- name: Install alacritty, neovim, brave-browser
   become: yes
   become_user: "{{ ansible_user_id if ansible_distribution == 'MacOSX' else omit}}"
   package:
     name:
       - alacritty
       - neovim
+      - brave-browser
     state: present
   ignore_errors: yes
 
-- name: Install docker and go
+- name: Install docker, go
   become: true
   package:
     name:
