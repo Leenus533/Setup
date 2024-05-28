@@ -79,11 +79,13 @@
     mode: "0755"
 
 - name: Download Docker GPG key
+  become: true
   get_url:
     url: https://download.docker.com/linux/ubuntu/gpg
     dest: /etc/apt/keyrings/docker.asc
 
 - name: Download Brave GPG key
+  become: true
   get_url:
     url: https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg
     dest: /usr/share/keyrings/brave-browser-archive-keyring.gpg
@@ -95,21 +97,25 @@
       wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /etc/apt/keyrings/packages.microsoft.gpg
 
 - name: Set permissions for Docker GPG key
+  become: true
   file:
     path: /etc/apt/keyrings/docker.asc
     mode: "0644"
 
 - name: Set permissions for Brave GPG key
+  become: true
   file:
     path: /usr/share/keyrings/brave-browser-archive-keyring.gpg
     mode: "0644"
 
 - name: Set permissions for Microsoft GPG key
+  become: true
   ansible.builtin.file:
     path: /etc/apt/keyrings/packages.microsoft.gpg
     mode: "0644"
 
 - name: Add Docker and Brave repositories
+  become: true
   apt_repository:
     repo: "{{ item.repo }}"
     state: present
