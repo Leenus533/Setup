@@ -18,6 +18,6 @@
     - import_tasks: tasks/zsh.yml
     - import_tasks: tasks/custom.yml
     - import_tasks: tasks/node.yml
-    - import_tasks: tasks/display.yml
+    #   - import_tasks: tasks/display.yml
     - import_tasks: tasks/dotfiles.yml
     - import_tasks: tasks/google.yml
