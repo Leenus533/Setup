@@ -27,12 +27,12 @@
   systemd:
     name: systemd-timesyncd
     state: started
-    enabled: yes
+    enabled: true
   ignore_errors: true
   when: ansible_distribution == "Archlinux"
 
 - name: Install alacritty, neovim
-  become: yes
+  become: true
   become_user: "{{ ansible_user_id if ansible_distribution == 'MacOSX' else omit}}"
   package:
     name:
@@ -42,7 +42,7 @@
       - ca-certificates
       - apt-transport-https
     state: present
-  ignore_errors: yes
+  ignore_errors: true
 
 - name: Install wmctrl
   become: true
@@ -62,7 +62,7 @@
 - name: Update apt cache and install common dependencies
   become: true
   apt:
-    update_cache: yes
+    update_cache: true
     name:
       - ca-certificates
       - curl
