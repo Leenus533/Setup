@@ -25,5 +25,7 @@
       - regolith-desktop
       - regolith-session-flashback
       - regolith-look-blackhole
+      - i3xrocks-battery
+
     state: present
   tags: regolith
