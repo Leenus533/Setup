@@ -17,10 +17,10 @@
   package:
     name: stow
     state: present
-  become: yes
+  become: true
   become_user: "{{ become_user_id }}"
   tags: dotfiles
-  ignore_errors: yes
+  ignore_errors: true
 
 - name: Remove .zshrc file
   file:
@@ -51,7 +51,7 @@
   file:
     path: /root/.config
     state: directory
-  become: yes
+  become: true
   tags: dotfiles
 
 - name: Create symbolic for nvim configuration
@@ -59,5 +59,5 @@
     src: /home/{{ ansible_user_id }}/.config/nvim
     dest: /root/.config/nvim
     state: link
-  become: yes
+  become: true
   tags: dotfiles

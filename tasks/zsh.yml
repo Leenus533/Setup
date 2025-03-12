@@ -1,5 +1,5 @@
 - name: Install ZSH and curl
-  become: yes
+  become: true
   become_user: "{{ become_user_id }}"
   package:
     name:
@@ -11,7 +11,7 @@
 - name: Change default shell to zsh for current user
   command:
     cmd: chsh -s /bin/zsh {{ ansible_user_id }}
-  become: yes
+  become: true
   tags: zsh
 
 - name: Check that the ~/.oh-my-zsh directory exists
@@ -32,7 +32,7 @@
     repo: "https://github.com/zsh-users/zsh-autosuggestions.git"
     dest: "{{ zsh_plugins_dir }}/zsh-autosuggestions"
   tags: zsh
-  become: yes
+  become: true
   become_user: "{{ ansible_user_id }}"
 
 - name: Clone zsh-fzf-history-search repository
@@ -40,11 +40,11 @@
     repo: "https://github.com/joshskidmore/zsh-fzf-history-search.git"
     dest: "{{ zsh_plugins_dir }}/zsh-fzf-history-search"
   tags: zsh
-  become: yes
+  become: true
   become_user: "{{ ansible_user_id }}"
 
 - name: Install tmux, fzf, zoxide
-  become: yes
+  become: true
   become_user: "{{ become_user_id }}"
   package:
     name:
@@ -53,12 +53,12 @@
       - zoxide
     state: present
   tags: zsh
-  ignore_errors: yes
+  ignore_errors: true
 
 - name: Clone tmux plugin manager repository
   git:
     repo: "https://github.com/tmux-plugins/tpm"
     dest: "/home/{{ ansible_user_id }}/.tmux/plugins/tpm"
-    clone: yes
-    update: yes
-  become: no
+    clone: true
+    update: true
+  become: false

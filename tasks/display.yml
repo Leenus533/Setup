@@ -1,5 +1,5 @@
 - name: Install autorandr
-  become: yes
+  become: true
   package:
     name: autorandr
     state: present
@@ -17,7 +17,7 @@
   command:
     cmd: autorandr --save workstation
   tags: display
-  become: yes
+  become: true
   become_user: "{{ ansible_user_id }}"
   ignore_errors: true
   when: ansible_distribution != "MacOSX"

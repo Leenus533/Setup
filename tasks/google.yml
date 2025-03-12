@@ -1,5 +1,5 @@
 - name: Install yay (if not already present)
-  become: yes
+  become: true
   pacman:
     name: yay
     state: present
@@ -13,4 +13,4 @@
     - discord
     - visual-studio-code-bin
   when: ansible_os_family == "Archlinux"
-  ignore_errors: yes
+  ignore_errors: true

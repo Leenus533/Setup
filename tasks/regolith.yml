@@ -1,0 +1,29 @@
+- name: Download Regolith GPG key
+  get_url:
+    url: https://archive.regolith-desktop.com/regolith.key
+    dest: /tmp/regolith.key
+  tags: regolith
+
+- name: Register the Regolith public key
+  shell:
+    cmd: cat /tmp/regolith.key | gpg --dearmor | tee /usr/share/keyrings/regolith-archive-keyring.gpg > /dev/null
+  tags: regolith
+
+- name: Add Regolith repository
+  shell:
+    cmd: echo "deb [arch=amd64 signed-by=/usr/share/keyrings/regolith-archive-keyring.gpg] https://archive.regolith-desktop.com/ubuntu/stable noble v3.2" | tee /etc/apt/sources.list.d/regolith.list
+  tags: regolith
+
+- name: Update apt cache
+  apt:
+    update_cache: true
+  tags: regolith
+
+- name: Install Regolith desktop
+  apt:
+    name:
+      - regolith-desktop
+      - regolith-session-flashback
+      - regolith-look-blackhole
+    state: present
+  tags: regolith

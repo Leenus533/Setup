@@ -1,5 +1,5 @@
 - name: Install core Node.js dependencies
-  become: yes
+  become: true
   become_user: "{{ become_user_id }}"
   package:
     name: [nodejs, npm, unzip]
@@ -8,7 +8,7 @@
   ignore_errors: true
 
 - name: Install n (Node Version Manager)
-  become: yes
+  become: true
   become_user: "{{ become_user_id }}"
   npm:
     name: n
@@ -17,7 +17,7 @@
   ignore_errors: true
 
 - name: Install latest Node.js using n
-  become: yes
+  become: true
   become_user: "{{ become_user_id }}"
   shell: n latest
   tags: node
@@ -31,7 +31,7 @@
   ignore_errors: true
 
 - name: Install TypeScript
-  become: yes
+  become: true
   become_user: "{{ become_user_id }}"
   npm:
     name: typescript
@@ -40,7 +40,7 @@
   ignore_errors: true
 
 - name: Install Nodemon
-  become: yes
+  become: true
   become_user: "{{ become_user_id }}"
   npm:
     name: nodemon

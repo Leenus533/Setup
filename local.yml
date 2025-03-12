@@ -21,3 +21,4 @@
     #   - import_tasks: tasks/display.yml
     - import_tasks: tasks/dotfiles.yml
     - import_tasks: tasks/google.yml
+    - import_tasks: tasks/regolith.yml

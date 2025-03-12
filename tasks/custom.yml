@@ -101,15 +101,6 @@
     path: /etc/apt/keyrings/docker.asc
     mode: "0644"
 
-- name: Install Zen Browser
-  ansible.builtin.shell: |
-    curl -sSL https://updates.zen-browser.app/appimage.sh > /tmp/zen_installer.sh && \
-    printf "1\n" | bash /tmp/zen_installer.sh && \
-    rm -f /tmp/zen_installer.sh
-  args:
-    executable: /bin/bash
-    creates: "{{ ansible_env.HOME }}/.local/bin/zen-browser"
-
 - name: Set permissions for Microsoft GPG key
   become: true
   ansible.builtin.file:
@@ -127,10 +118,7 @@
         repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu noble stable",
         filename: "docker",
       }
-    - {
-        repo: "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main",
-        filename: "google-chrome",
-      }
+    - { repo: "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main", filename: "google-chrome" }
     - {
         repo: "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main",
         filename: "vscode",
