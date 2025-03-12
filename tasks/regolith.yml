@@ -8,16 +8,19 @@
   shell:
     cmd: cat /tmp/regolith.key | gpg --dearmor | tee /usr/share/keyrings/regolith-archive-keyring.gpg > /dev/null
   tags: regolith
+  become: true
 
 - name: Add Regolith repository
   shell:
     cmd: echo "deb [arch=amd64 signed-by=/usr/share/keyrings/regolith-archive-keyring.gpg] https://archive.regolith-desktop.com/ubuntu/stable noble v3.2" | tee /etc/apt/sources.list.d/regolith.list
   tags: regolith
+  become: true
 
 - name: Update apt cache
   apt:
     update_cache: true
   tags: regolith
+  become: true
 
 - name: Install Regolith desktop
   apt:
@@ -29,3 +32,4 @@
 
     state: present
   tags: regolith
+  become: true
